@@ -6,8 +6,24 @@ const loginBtn = $.querySelector(".login-btn");
 
 loginBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  // save user information in cookie when user confirm
+  saveUserLoginData();
+  clearInputs();
+});
 
+window.addEventListener("load", (e) => {
+  if (document.cookie) {
+    loadUserLoginData()
+  }
+});
+
+function clearInputs() {
+  userNameInput.value = "";
+  passwordInput.value = "";
+  rememberInput.checked = false;
+}
+
+function saveUserLoginData() {
+  // save user information in cookie when user confirm
   let userNameValue = userNameInput.value.trim().toLowerCase();
   let passwordValue = passwordInput.value.trim().toLowerCase();
   let isRememberChekced = rememberInput.checked;
@@ -27,24 +43,14 @@ loginBtn.addEventListener("click", (e) => {
       userInfo
     )};path=/;expires=${expireTime}`;
   }
+}
 
-  clearInputs()
-});
-
-window.addEventListener("load", (e) => {
-  if (document.cookie) {
-    let equalAssignIndex = document.cookie.indexOf("=");
-    let userLoginData = JSON.parse(
-      document.cookie.substring(equalAssignIndex + 1)
-    );
-    userNameInput.value = userLoginData.name;
-    passwordInput.value = userLoginData.password;
-    rememberInput.checked = true;
-  }
-});
-
-function clearInputs() {
-  userNameInput.value = "";
-  passwordInput.value = "";
-  rememberInput.checked = false;
+function loadUserLoginData(){
+  let equalAssignIndex = document.cookie.indexOf("=");
+  let userLoginData = JSON.parse(
+    document.cookie.substring(equalAssignIndex + 1)
+  );
+  userNameInput.value = userLoginData.name;
+  passwordInput.value = userLoginData.password;
+  rememberInput.checked = true;
 }
